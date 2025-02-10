@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Poppins";
+  src: url("./assets/fonts/Poppins/Poppins-Light.ttf");
+  font-weight: normal;
+}
+@font-face {
+  font-family: "Poppins";
+  src: url("./assets/fonts/Poppins/Poppins-Medium.ttf");
+  font-weight: 500;
+}
+@font-face {
+  font-family: "Poppins";
+  src: url("./assets/fonts/Poppins/Poppins-SemiBold.ttf");
+  font-weight: 600;
+}
+@font-face {
+  font-family: "Poppins";
+  src: url("./assets/fonts/Poppins/Poppins-Bold.ttf");
+  font-weight: 700;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  font-weight: normal;
+}
+.container {
+  max-width: 1420px;
+  padding: 0 24px;
+}
+
+.btn1 {
+  background: #00858E;
+  height: 42px;
+  font-size: 16px;
+  color: white;
+  font-weight: 500;
+  padding: 0 16px;
+  transition: all 0.3s;
+  border-radius: 8px;
+}
+.btn2 {
+  border: 2px solid white;
+  height: 42px;
+  font-size: 16px;
+  color: white;
+  font-weight: 500;
+  padding: 0 16px;
+  transition: all 0.3s;
+  border-radius: 8px;
+}
+.btn1:hover {
+  background: #1bb1bb;
+}
+.btn2:hover {
+  border-color: #00858E;
+  color: #00858E;
+}
+@media (max-width: 768px) {
+  .container {
+    padding: 0 16px;
+  }
+
+  .btn1,
+  .btn2 {
+    height: 40px;
+    font-size: 14px;
+    padding: 0 18px;
+  }
+}

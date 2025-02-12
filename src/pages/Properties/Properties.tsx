@@ -112,7 +112,7 @@ const Properties = () => {
                                                 />
                                                 <Link
                                                     to={"#"}
-                                                    className="text-sm text-[#040404] font-medium hover:text-primary duration-300 block)] w-[250px]"
+                                                    className="text-sm text-text1 font-medium  hover:text-primary duration-300 block)] w-[250px]"
                                                 >
                                                     Skyline Residences
                                                 </Link>
@@ -120,12 +120,12 @@ const Properties = () => {
                                         </div>
                                     </td>
                                     <td className=" py-3 px-3">
-                                        <span className="text-sm text-[#040404] font-medium">
+                                        <span className="text-sm text-text1 font-medium ">
                                             5th Avenue, New York, USA
                                         </span>
                                     </td>
                                     <td className=" py-3 px-3">
-                                        <span className="text-sm text-[#040404] font-medium">
+                                        <span className="text-sm text-text1 font-medium ">
                                             1000
                                         </span>
                                     </td>
@@ -140,7 +140,7 @@ const Properties = () => {
                                     </td>
                                     <td className=" py-3 px-3">
                                         <Link
-                                            to={`/admin/booking-list/100`}
+                                            to={`/bookings/100`}
                                             className="mx-auto"
                                         >
                                             <span className="text-sm text-primary bg-primary font-medium bg-opacity-15 hover:bg-opacity-25 duration-300 rounded px-2 py-1">View</span>
@@ -169,7 +169,7 @@ const Properties = () => {
                                                 />
                                                 <Link
                                                     to={"#"}
-                                                    className="text-sm text-[#040404] font-medium hover:text-primary duration-300 block)] w-[250px]"
+                                                    className="text-sm text-text1 font-medium  hover:text-primary duration-300 block)] w-[250px]"
                                                 >
                                                     Skyline Residences
                                                 </Link>
@@ -177,12 +177,12 @@ const Properties = () => {
                                         </div>
                                     </td>
                                     <td className=" py-3 px-3">
-                                        <span className="text-sm text-[#040404] font-medium">
+                                        <span className="text-sm text-text1 font-medium ">
                                             5th Avenue, New York, USA
                                         </span>
                                     </td>
                                     <td className=" py-3 px-3">
-                                        <span className="text-sm text-[#040404] font-medium">
+                                        <span className="text-sm text-text1 font-medium ">
                                             1000
                                         </span>
                                     </td>

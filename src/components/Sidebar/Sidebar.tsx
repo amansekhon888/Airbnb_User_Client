@@ -1,17 +1,27 @@
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
     ApartmentOutlined,
-    CalendarMonthOutlined,
     HelpOutline,
-    HomeWorkOutlined,
     Logout,
-    ReceiptLongOutlined,
-    SettingsOutlined,
 } from "@mui/icons-material";
 import { logo } from "../../assets/images";
+import { useLogoutMutation } from "../../redux/api/auth";
 
 const Sidebar = () => {
-    const { id } = useParams();
+    // const { id } = useParams();
+    const navigate = useNavigate();
+    const [LogoutMutation, { isLoading }] = useLogoutMutation();
+
+    const handleLogout = async () => {
+        try {
+            await LogoutMutation({}).unwrap(); 
+            localStorage.removeItem("token"); 
+            navigate("/auth"); 
+        } catch (error) {
+            console.error("Logout failed", error);
+        }
+    };
+
     return (
         <div className="bg-primary py-6 h-full">
             <div className="px-5">
@@ -53,6 +63,8 @@ const Sidebar = () => {
                 <li>
                     <button
                         className={`w-full text-sm duration-300 px-5 py-2.5 text-white tracking-wider hover:bg-primaryHover uppercase flex items-center gap-3 border-l-[6px] border-transparent`}
+                        onClick={handleLogout}
+                        disabled={isLoading}
                     >
                         <Logout /> Log Out
                     </button>

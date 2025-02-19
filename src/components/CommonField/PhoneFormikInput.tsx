@@ -30,9 +30,9 @@ const PhoneFormikInput: React.FC<PhoneInputProps> = ({
             <div className={` ${customClass} `}>
                 <PhoneInput
                     value={value}
-                    country={defaultCountry} // Set default country
+                    country={defaultCountry} 
                     placeholder="Enter phone number"
-                    onChange={onChange} // Trigger the onChange handler from props
+                    onChange={onChange} 
                     inputProps={{
                         id: `${name}-${defaultCountry}`,
                         name: {name}

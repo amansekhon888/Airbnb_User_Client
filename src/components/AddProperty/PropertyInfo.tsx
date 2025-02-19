@@ -1,43 +1,39 @@
 import { Form, FormikProvider, useFormik } from 'formik'
-import Input from '../CommonField/Input';
+import mapBg from "../../assets/images/mapBg.png"
+import { CityOptions, propertyCategoryOptions, propertyTypeOptions, StateOptions } from '../../constants/property';
+import Input from '../CommonField/Input.tsx';
 import Select from '../CommonField/Select';
 import TextArea from '../CommonField/textarea';
-import mapBg from "../../assets/images/mapBg.png"
 
 const PropertyInfo = () => {
     const formik = useFormik({
-        //+ 
-        initialValues: {}, //+
+        initialValues: {
+            propertyTitle: "",
+            propertyType: "",
+            propertyDescription: "",
+            propertyCity: "",
+            propertyCategoryId: "",
+            propertyAddress: "",
+            propertyState: "",
+            propertyLandmark: "",
+            propertyZipcode: "",
+            // propertyGallery: PropertyGallery[],
+            propertyCountry: "",
+            propertyAvailabilityDates: {
+                startDate: "",
+                endDate: "",
+            },
+            propertyPlaceType: '',
+            propertyCoordinates: {
+                longitude: "",
+                latitude: "",
+            },
+        },
         onSubmit: async (values) => {
             console.log(values)
         },
     });
 
-    const propertyTypeOptions = [
-        { value: 'apartment', label: 'Apartment' },
-        { value: 'house', label: 'House' },
-        { value: 'condo', label: 'Condo' },
-        { value: 'townhouse', label: 'Townhouse' },
-        { value: 'villa', label: 'Villa' },
-    ];
-    const propertyCategoryOptions = [
-        { value: 'house_rental', label: 'House Rental' },
-        { value: 'apartment_rental', label: 'Apartment Rental' },
-        { value: 'condo_rental', label: 'Condo Rental' },
-        { value: 'townhouse_rental', label: 'Townhouse Rental' },
-    ];
-    const StateOptions = [
-        { value: 'Alabama', label: 'Alabama' },
-        { value: 'Alaska', label: 'Alaska' },
-        { value: 'Arizona', label: 'Arizona' },
-        { value: 'Arkansas', label: 'Arkansas' },
-    ]
-    const CityOptions = [
-        { value: 'Birmingham', label: 'Birmingham' },
-        { value: 'Chicago', label: 'Chicago' },
-        { value: 'Denver', label: 'Denver' },
-        { value: 'New York', label: 'New York' },
-    ]
     return (
         <div>
             <h2 className='text-text1 text-2xl font-medium'>Property Information</h2>

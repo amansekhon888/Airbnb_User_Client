@@ -1,17 +1,21 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import Layout from "./Layout/Layout"
-import Home from "./pages/Home/Home.tsx"
 import Properties from "./pages/Properties/Properties.tsx"
 import Bookings from "./pages/Bookings/Bookings.tsx"
-import AddProperty from "./Pages/AddProperty/AddProperty.tsx";
-import Auth from "./Pages/Auth/Auth.tsx";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute.tsx"
+import AddProperty from "./pages/AddProperty/AddProperty.tsx"
+import Auth from "./pages/Auth/Auth.tsx"
 
 const App = () => {
 
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Layout />,
+      element: (
+        <ProtectedRoute>
+          <Layout />
+        </ProtectedRoute>
+      ),
       children: [
         {
           path: "/my-properties",
@@ -23,7 +27,9 @@ const App = () => {
         },
         {
           path: "/add-property",
-          element: <AddProperty />,
+          element: (
+            <AddProperty />
+          )
         },
       ]
     },

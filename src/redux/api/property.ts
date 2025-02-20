@@ -1,8 +1,6 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { baseApi } from "../baseApi";
 
-export const propertyApi = createApi({
-  reducerPath: "propertyApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "https://your-api.com" }), // Replace with actual API
+export const propertyApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     fetchDraft: builder.query({
       query: (draftId) => `/properties/draft/${draftId}`,

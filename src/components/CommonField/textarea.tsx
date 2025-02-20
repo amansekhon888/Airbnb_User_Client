@@ -1,14 +1,13 @@
-import { useFormikContext } from 'formik'
+import { getIn, useFormikContext } from 'formik'
 import React from 'react'
 import classNames from 'classnames';
 
 interface IInput {
     name: string,
     label?: string,
-    value?: string | number,
     placeholder?: string,
     divClass?: string,
-    inputClass?: string,  //  i am taking label class, input class in differnet because of tailwind , as passing tailwind class is easy as compared to giving parent class and writing manual css
+    inputClass?: string, 
     labelClass?: string,
     disabled?: boolean,
     isRequired?: boolean
@@ -16,9 +15,9 @@ interface IInput {
     error?: string
 }
 
-
-const TextArea: React.FC<IInput> = ({ name, disabled, label, value, placeholder, inputClass, labelClass, isRequired = false, rows = 2, error }) => {
+const TextArea: React.FC<IInput> = ({ name, disabled, label,placeholder, inputClass, labelClass, isRequired = false, rows = 2, error }) => {
     const { handleBlur, handleChange, values } = useFormikContext()
+    const fieldValue = getIn(values, name, "");
 
     return (
         <div>
@@ -31,7 +30,7 @@ const TextArea: React.FC<IInput> = ({ name, disabled, label, value, placeholder,
                 rows={rows}
                 className={classNames("py-2 px-3 text-text1 placeholder:text-text3 border-border1 w-full rounded-md", inputClass)}
                 placeholder={placeholder}
-                value={(value ?? (values as { [key: string]: string })?.[name])}
+                value={fieldValue}
             ></textarea>
             {error && (
                 <span className="text-red-500 text-sm mt-1 block">{error}</span> // Display error message

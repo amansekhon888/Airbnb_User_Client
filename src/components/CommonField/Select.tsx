@@ -1,4 +1,4 @@
-import { useFormikContext } from "formik";
+import { getIn, useFormikContext } from "formik";
 import React from "react";
 import classNames from "classnames";
 
@@ -28,6 +28,7 @@ const Select: React.FC<ISelect> = ({
   error
 }) => {
   const { handleBlur, handleChange, values } = useFormikContext();
+  const fieldValue = getIn(values, name, "");
 
   return (
     <div>
@@ -48,7 +49,7 @@ const Select: React.FC<ISelect> = ({
           "py-2 px-3 text-text1 placeholder:text-text3 border-border1 w-full rounded-md",
           inputClass
         )}
-        value={(values as { [key: string]: string })?.[name] || ""}
+        value={fieldValue}
       >
         <option hidden value="">
           Select {placeholder}

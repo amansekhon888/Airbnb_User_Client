@@ -1,42 +1,26 @@
 import { Add, Remove } from '@mui/icons-material'
 import React from 'react'
 import AddPhotos from './AddPhotos'
+import { Form } from 'formik';
+import { Amenities } from '../../constants/property';
 
-const NewPropertyDetails = () => {
+interface NewPropertyDetailsProps {
+    handleProgress: () => void;
+    isFormAvailable: boolean;
+}
 
-    const Amenities = [
-        {
-            title: 'Recommended Amenities',
-            subtitle: 'Travelers prefer these amenities when booking homes',
-            items: ['Air conditioning', 'Breakfast', 'Cable TV', 'Fireplace', 'Kitchen', 'Private entrance', 'Smoke detector', 'Washer', 'Wifi'],
-        },
-        {
-            title: 'Guest’s favorites',
-            subtitle: 'Most of our successful properties provide these amenities.',
-            items: ['Closet', "Dryer", "Essentials", "Heating", "Iron", "Laptop friendly workspace", "TV", "Hangers", "Hair dryer"],
-        },
-        {
-            title: 'Kitchen',
-            subtitle: 'Guests often book homes because of the kitchen, make sure you let travelers know what to expect in your kitchen spaces.',
-            items: ['Coffee maker', 'Cooking basics', 'Dishes and silverware', 'Dishwasher', 'Microwave', 'Oven', 'Refrigerator', 'Stove'],
-        },
-        {
-            title: 'Safety and Cleanlinesss',
-            subtitle: 'Safety features that guests often look for when booking homes.',
-            items: ['Fire extinguisher', 'First aid kit', 'Smoke detector', 'Carbon monoxide detector', 'Lock on bedroom door', 'Private entrance', 'Safety card', 'Window guards', 'Bedroom comforts'],
-        },
-        {
-            title: 'Others',
-            subtitle: 'Other amenities that guests often look for when booking homes.',
-            items: ['Carbon monoxide detector', 'First aid kit', 'Free parking on premises', 'Gym', 'Hot tub', 'Pool', 'Self check-in', 'Pets allowed', 'Wheelchair accessible'],
-        }
-    ]
+const NewPropertyDetails: React.FC<NewPropertyDetailsProps> = ({
+    handleProgress,
+    isFormAvailable,
+}) => {
+    if (!isFormAvailable) return null;
+    
     return (
         <div>
             <h2 className='text-text1 text-2xl font-medium'>Property Details</h2>
             <p className='text-text3 mt-1'>Specific details about the property to help guests understand what’s being offered.</p>
             <div className='mt-6'>
-                <div>
+                <Form onSubmit={handleProgress}>
                     <div className='grid md:grid-cols-2 gap-4'>
                         <div className='flex items-center justify-between gap-4 border border-border1 px-3 py-2 rounded-md'>
                             <label htmlFor="" className='text-text1 '>Number of Bedrooms</label>
@@ -99,7 +83,7 @@ const NewPropertyDetails = () => {
                     <div className='mt-8'>
                         <button type='submit' className='btn1 w-full'>Next</button>
                     </div>
-                </div>
+                </Form>
             </div>
         </div>
     )

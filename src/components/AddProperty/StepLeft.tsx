@@ -2,13 +2,14 @@ import { DoneRounded } from '@mui/icons-material';
 import React from 'react';
 
 interface StepLeftProps {
-    status: 'done' | 'progress';
+    status: 'done' | 'progress' | 'pending';
     step: number;
 }
 const StepLeft: React.FC<StepLeftProps> = ({ status, step }) => {
     const statusClasses = {
         done: "bg-[#34C759]",
         progress: "bg-[#FCAF3D]",
+        pending: "bg-[#E0E0E0]",
     };
 
     const bgColor = statusClasses[status] || "bg-[#FCAF3D]"; // Default to gray if status is invalid

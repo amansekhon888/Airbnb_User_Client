@@ -19,7 +19,9 @@ const Login = () => {
         e.preventDefault();
         try {
             const response = await login({ loginKey, password }).unwrap() as unknown as LoginResponse;
-            localStorage.setItem("token", response.sessiontoken);
+            console.log(response);
+            
+            localStorage.setItem("token", response.sessionToken);
             navigate("/")
         } catch (err: any) {
             console.error("Login failed", err.message);
@@ -81,7 +83,7 @@ const Login = () => {
                                 required
                             />
                             <div className="mt-1 md:mt-[.2vw] text-end">
-                                <p><Link to="/auth/forgot-password" state={{ inputMode }} className="text-red-600 md:text-[.8vw]">Forgot Password?</Link></p>
+                                <p><Link to="/auth/forgot-password" state={{ inputMode }} className="text-red-600 md:text-[.8vw] font-medium">Forgot Password?</Link></p>
                             </div>
                         </div>
                         <button

@@ -23,6 +23,19 @@ const Sidebar = () => {
             <ul className="">
                 <li>
                     <NavLink
+                        to="/dashboard"
+                        className={({ isActive }) =>
+                            `text - sm duration-300 px-5 py-2.5 text-white tracking-wider hover:bg-primaryHover uppercase flex items-center gap-3 border-l-[6px] ${isActive
+                                ? "border-[#fff3dd] bg-primaryHover"
+                                : "border-transparent"
+                            }`
+                        }
+                    >
+                        <ApartmentOutlined /> Dashboard
+                    </NavLink>
+                </li>
+                <li>
+                    <NavLink
                         to="/my-properties"
                         className={({ isActive }) =>
                             `text - sm duration-300 px-5 py-2.5 text-white tracking-wider hover:bg-primaryHover uppercase flex items-center gap-3 border-l-[6px] ${isActive

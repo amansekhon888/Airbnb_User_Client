@@ -194,7 +194,7 @@ const Properties = () => {
                                     </td>
                                     <td className=" py-3 px-3 rounded-r-xl">
                                         <Link
-                                            to={`/admin/property-details/1`}
+                                            to={`/property/1`}
                                             className="mx-auto text-primary"
                                         >
 

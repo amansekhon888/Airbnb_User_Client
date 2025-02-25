@@ -4,7 +4,9 @@ import Home from "./pages/Home/Home.tsx"
 import Properties from "./pages/Properties/Properties.tsx"
 import Bookings from "./pages/Bookings/Bookings.tsx"
 import AddProperty from "./Pages/AddProperty/AddProperty.tsx";
+import Dashboard from "./Pages/Dashboard/Dashboard.tsx";
 import Auth from "./Pages/Auth/Auth.tsx";
+import EditProperty from "./Pages/EditProperty/EditProperty.tsx";
 
 const App = () => {
 
@@ -13,6 +15,10 @@ const App = () => {
       path: "/",
       element: <Layout />,
       children: [
+        {
+          path: "/dashboard",
+          element: <Dashboard />
+        },
         {
           path: "/my-properties",
           element: <Properties />
@@ -24,6 +30,10 @@ const App = () => {
         {
           path: "/add-property",
           element: <AddProperty />,
+        },
+        {
+          path: "/property/:id",
+          element: <EditProperty />,
         },
       ]
     },

@@ -6,6 +6,7 @@ import {
 } from "@mui/icons-material";
 import { logo } from "../../assets/images";
 import { useLogoutMutation } from "../../redux/api/auth";
+import Cookies from "js-cookie";
 
 const Sidebar = () => {
     // const { id } = useParams();
@@ -15,7 +16,7 @@ const Sidebar = () => {
     const handleLogout = async () => {
         try {
             await LogoutMutation({}).unwrap(); 
-            localStorage.removeItem("token"); 
+            Cookies.remove('client-token')
             navigate("/auth"); 
         } catch (error) {
             console.error("Logout failed", error);

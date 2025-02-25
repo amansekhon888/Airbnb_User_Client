@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowBackOutlined, Email } from "@mui/icons-material";
+import { ArrowBackOutlined, Email, FacebookOutlined, Phone, PhoneOutlined, VisibilityOff, VisibilityOffOutlined, VisibilityOutlined } from "@mui/icons-material";
 import { useLoginMutation } from "../../redux/api/auth";
-
+import Cookies from "js-cookie"
 import google from "../../assets/icons/google.png";
 import facebook from "../../assets/icons/facebook2.png";
 import { LoginResponse } from "../../types/Auth";
@@ -11,6 +11,7 @@ const Login = () => {
     const [loginKey, setLoginKey] = useState("");
     const [password, setPassword] = useState("");
     const [inputMode, setInputMode] = useState("email");
+    const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
 
     const [login, { isLoading }] = useLoginMutation();
@@ -19,9 +20,12 @@ const Login = () => {
         e.preventDefault();
         try {
             const response = await login({ loginKey, password }).unwrap() as unknown as LoginResponse;
-            console.log(response);
-            
-            localStorage.setItem("token", response.sessionToken);
+            const payload = await JSON.parse(response.sessionPayload);
+
+            Cookies.set("client-token", payload?.token, {
+                expires: new Date(payload?.exp * 1000),
+            });
+
             navigate("/")
         } catch (err: any) {
             console.error("Login failed", err.message);
@@ -74,14 +78,24 @@ const Login = () => {
                         }
                         <div>
                             <label htmlFor="Password" className="text-text3 mb-1 inline-block md:text-[1.1vw]">Password</label>
-                            <input
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                className="text-text1 border border-border1 w-full rounded-md md:rounded-[.4vw] focus:ring-0 focus:border-primary placeholder:text-[#C3C3C3] md:text-[1.1vw] py-1.5 md:py-[.6vw] md:px-[.6vw]"
-                                placeholder="Enter Password"
-                                required
-                            />
+                            <div className="relative">
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    className="text-text1 border border-border1 w-full rounded-md md:rounded-[.4vw] focus:ring-0 focus:border-primary placeholder:text-[#C3C3C3] md:text-[1.1vw] py-1.5 md:py-[.6vw] md:px-[.6vw] pr-10"
+                                    placeholder="Enter Password"
+                                    required
+                                />
+                                {/* Show/Hide Toggle Button */}
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword((prev) => !prev)}
+                                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-text3"
+                                >
+                                    {showPassword ? <VisibilityOffOutlined className="!text-lg md:!text-[1.4vw]" /> : <VisibilityOutlined className="!text-lg md:!text-[1.4vw]" />}
+                                </button>
+                            </div>
                             <div className="mt-1 md:mt-[.2vw] text-end">
                                 <p><Link to="/auth/forgot-password" state={{ inputMode }} className="text-red-600 md:text-[.8vw] font-medium">Forgot Password?</Link></p>
                             </div>
@@ -101,16 +115,16 @@ const Login = () => {
                 <div className="flex flex-col gap-5 md:gap-[1vw]">
                     {inputMode === "email" &&
                         <button className="border py-2 md:py-[0.8vw] w-full rounded-md md:rounded-[.4vw] flex items-center justify-center gap-3 border-text1 hover:text-primary hover:border-primary duration-300" onClick={() => { setLoginKey(""); setInputMode("phone") }}>
-                            <img src={facebook} className="w-4 md:w-[1.4vw]" alt="Facebook Icon" /> Continue with Phone
+                            <PhoneOutlined className="text-primary !text-lg" /> Continue with Phone
                         </button>
                     }
                     {inputMode === "phone" &&
                         <button className="border py-2 md:py-[0.8vw] w-full rounded-md md:rounded-[.4vw] flex items-center justify-center gap-3 border-text1 hover:text-primary hover:border-primary duration-300" onClick={() => { setLoginKey(""); setInputMode("email") }}>
-                            <Email className="text-primary" /> Continue with Email
+                            <Email className="text-primary !text-lg" /> Continue with Email
                         </button>
                     }
                     <button className="border py-2 md:py-[0.8vw] w-full rounded-md md:rounded-[.4vw] flex items-center justify-center gap-3 border-text1 hover:text-primary hover:border-primary duration-300" onClick={handleFacebookLogin}>
-                        <img src={facebook} className="w-4 md:w-[1.4vw]" alt="Facebook Icon" /> Log in with Facebook
+                        <FacebookOutlined className="text-blue-600 !text-lg" /> Log in with Facebook
                     </button>
                     <button className="border py-2 md:py-[0.8vw] w-full rounded-md md:rounded-[.4vw] flex items-center justify-center gap-[1vw] border-text1 hover:text-primary hover:border-primary duration-300" onClick={handleGoogleLogin}>
                         <img src={google} className="w-4 md:w-[1.4vw]" alt="Google Icon" /> Log in with Google

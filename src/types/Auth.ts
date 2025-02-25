@@ -1,5 +1,5 @@
 export interface LoginResponse {
-    sessionToken: string,
+    sessionPayload: string,
     step: string
 }
 export interface ApiResponse<T> {

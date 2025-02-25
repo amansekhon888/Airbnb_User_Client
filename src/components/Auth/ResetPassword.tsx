@@ -2,8 +2,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { ArrowBackOutlined } from "@mui/icons-material";
 import { useChangePasswordMutation } from "../../redux/api/auth";
 import { FormikProvider, useFormik, Form } from "formik";
-import * as Yup from "yup";
 import { useState } from "react";
+import { resetPasswordValidation } from "../../validations/resetPassword";
 
 const ResetPassword = () => {
     const navigate = useNavigate();
@@ -15,17 +15,7 @@ const ResetPassword = () => {
             password: "",
             confirmPassword: "",
         },
-        validationSchema: Yup.object({
-            password: Yup.string()
-                .min(8, "Password must be at least 8 characters")
-                .matches(/[A-Z]/, "Must contain at least one uppercase letter")
-                .matches(/[0-9]/, "Must contain at least one number")
-                .matches(/[@$!%*?&]/, "Must contain at least one special character")
-                .required("Password is required"),
-            confirmPassword: Yup.string()
-                .oneOf([Yup.ref("password")], "Passwords do not match")
-                .required("Confirm password is required"),
-        }),
+        validationSchema: resetPasswordValidation,
         onSubmit: async (values) => {
             const response = await changePassword(values.password);
             if (response.error && 'data' in response.error && !(response.error.data as { success?: boolean }).success) {

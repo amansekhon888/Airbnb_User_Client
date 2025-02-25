@@ -1,29 +1,20 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useLogoutMutation, useVerifyMutation } from "../../redux/api/auth";
+import Cookies from "js-cookie";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const [verifyToken, { error, isLoading }] = useVerifyMutation();
-  const [LogoutMutation,] = useLogoutMutation();
+  const token = Cookies.get("client-token");
   const navigate = useNavigate();
 
   useEffect(() => {
-    verifyToken({});
-  }, [verifyToken]);
-
-  useEffect(() => {
-    if (error) {
-      LogoutMutation({}).unwrap();
-      localStorage.removeItem("token");
-      navigate("/auth", { state: { openModal: true } });
+    if (!token) {
+      navigate("/auth");
     }
-  }, [error, navigate]);
-
-  if (isLoading) return <p>Verifying...</p>;
+  }, [token, navigate]);
 
   return <>{children}</>;
 };

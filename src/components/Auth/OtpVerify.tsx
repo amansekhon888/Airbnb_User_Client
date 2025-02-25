@@ -91,7 +91,7 @@ const OtpVerify = () => {
                     <div className='flex flex-col gap-4 md:gap-[1.5vw]'>
                         <div className="flex items-center gap-4 justify-center">
                             {otp.map((digit, index) => (
-                                <input key={index} type="text" className='text-text1 border border-border1 rounded-md md:rounded-[.4vw] focus:ring-0 focus:border-primary placeholder:text-[#C3C3C3] md:text-[1.4vw] py-1.5 md:py-[.6vw] md:px-[.6vw] w-10 sm:w-12 md:[3.5vw] font-medium' ref={(el) => (inputRefs.current[index] = el)} value={digit} maxLength={1} onChange={(e) => handleChange(index, e.target.value)}
+                                <input key={index} type="text" className='text-text1 text-center border border-border1 rounded-md md:rounded-[.4vw] focus:ring-0 focus:border-primary placeholder:text-[#C3C3C3] md:text-[1.4vw] py-1.5 md:py-[.6vw] md:px-[.6vw] w-10 sm:w-12 md:[3.5vw] font-medium' ref={(el) => (inputRefs.current[index] = el)} value={digit} maxLength={1} onChange={(e) => handleChange(index, e.target.value)}
                                 onKeyDown={(e) => handleKeyDown(index, e)} onPaste={handlePaste} />
                             ))}
                         </div>

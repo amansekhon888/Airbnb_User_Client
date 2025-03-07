@@ -85,9 +85,19 @@ const AddProperty = () => {
             console.error("Error saving property:", error);
         }
     };
-
-
-
+    const handelPublish = async () => {
+        const requestData = {
+            step: 6,
+            id: propertyId
+        }
+        try {
+            const response = await addPropertyFun(requestData).unwrap();
+            console.log("Response:", response);
+            toast.success("Property saved successfully")
+        } catch (error) {
+            console.error("Error saving property:", error);
+        }
+    }
     return (
         <>
             <Header />
@@ -159,6 +169,10 @@ const AddProperty = () => {
                                 )}
                             </Formik>
                         )}
+                        <div className="mt-10 flex items-center justify-end gap-4">
+                            <button className="btn2">Preview</button>
+                            <button className="btn1" onClick={handelPublish}>Publish</button>
+                        </div>
                     </div>
                 </div>
             </div>

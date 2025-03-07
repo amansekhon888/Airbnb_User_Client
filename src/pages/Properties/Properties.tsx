@@ -159,7 +159,7 @@ const Properties = () => {
                                         <td className=" py-1.5 px-3 rounded-r-xl">
                                             {property.status === "active" &&
                                                 <Link
-                                                    to={`/admin/property-details/1`}
+                                                    to={`/property/${property._id}`}
                                                     className="mx-auto"
                                                 >
                                                     <Visibility className="text-primary" />

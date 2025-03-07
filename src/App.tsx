@@ -8,6 +8,7 @@ import Auth from "./pages/Auth/Auth.tsx"
 import Dashboard from "./pages/Dashboard/Dashboard.tsx"
 import EditProperty from "./pages/EditProperty/EditProperty.tsx"
 import { ToastContainer } from 'react-toastify';
+import PropertyDetails from "./pages/PropertyDetails/PropertyDetails.tsx"
 
 const App = () => {
 
@@ -33,8 +34,12 @@ const App = () => {
           element: <Bookings />
         },
         {
-          path: "/property/:id",
+          path: "/property/edit/:id",
           element: <EditProperty />,
+        },
+        {
+          path: "/property/:id",
+          element: <PropertyDetails />,
         },
       ]
     },

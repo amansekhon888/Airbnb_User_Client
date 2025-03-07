@@ -1,17 +1,11 @@
-import { Form, FormikProvider, useFormik } from 'formik'
 import Input from '../CommonField/Input';
 import Select from '../CommonField/Select';
 import TextArea from '../CommonField/textarea';
 import mapBg from "../../assets/images/mapBg.png"
+import AddPhotos from './AddPhotos';
 
-const PropertyInfo = () => {
-    const formik = useFormik({
-        //+ 
-        initialValues: {}, //+
-        onSubmit: async (values) => {
-            console.log(values)
-        },
-    });
+const PropertyInfo = ({ setCurrentStep }) => {
+    setCurrentStep(1)
 
     const propertyTypeOptions = [
         { value: 'apartment', label: 'Apartment' },
@@ -20,11 +14,15 @@ const PropertyInfo = () => {
         { value: 'townhouse', label: 'Townhouse' },
         { value: 'villa', label: 'Villa' },
     ];
+    const typeofPlaceOptions = [
+        { value: 'any', label: 'Any' },
+        { value: 'room', label: 'Room' },
+        { value: 'home', label: 'Home' },
+    ];
     const propertyCategoryOptions = [
-        { value: 'house_rental', label: 'House Rental' },
-        { value: 'apartment_rental', label: 'Apartment Rental' },
-        { value: 'condo_rental', label: 'Condo Rental' },
-        { value: 'townhouse_rental', label: 'Townhouse Rental' },
+        { value: '67bdfc967028ece27a2307dc', label: 'Beach' },
+        { value: '67be00705a0144ce64abb460', label: 'Hill' },
+        { value: '67be02ac30ad68a43661e9cb', label: 'plain' },
     ];
     const StateOptions = [
         { value: 'Alabama', label: 'Alabama' },
@@ -40,50 +38,57 @@ const PropertyInfo = () => {
     ]
     return (
         <div>
-            <h2 className='text-text1 text-2xl font-medium'>Property Information</h2>
-            <p className='text-text3 mt-1'>Basic property details that are essential for setting up the listing.</p>
             <div className='mt-6'>
-                <FormikProvider value={formik}>
-                    <Form onSubmit={formik.handleSubmit}>
-                        <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
-                            <div className='col-span-2'>
-                                <Input name='property_name' placeholder='Enter property name' label='Property Title' />
-                            </div>
-                            <div className=''>
-                                <Select name='property_type' label='Property Type' options={propertyTypeOptions} />
-                            </div>
-                            <div className=''>
-                                <Select name='property_category' label='Property Category' options={propertyCategoryOptions} />
-                            </div>
-                            <div className='col-span-2'>
-                                <TextArea name='property_description' placeholder='Enter property description' label='Property Description' rows={3} inputClass='resize-none' />
-                            </div>
-                            <div className='col-span-2'>
-                                <Input name='property_address' placeholder='Enter address' label='Address' />
-                            </div>
-                            <div className=''>
-                                <Select name='state' label='County / State' options={StateOptions} />
-                            </div>
-                            <div className=''>
-                                <Select name='city' label='City' options={CityOptions} />
-                            </div>
-                            <div className=''>
-                                <Input name='landmark' placeholder='Enter Landmark' label='Landmark' />
-                            </div>
-                            <div className=''>
-                                <Input name='zipcode' placeholder='Enter Zip Code' label='Zip Code' />
-                            </div>
-                            <div className='col-span-2 mt-3'>
-                                <div className='h-[300px] rounded-xl overflow-hidden'>
-                                    <img src={mapBg} className='h-[300px] w-full object-cover' />
-                                </div>
-                            </div>
+                <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
+                    <div className='col-span-2'>
+                        <Input name='title' placeholder='Enter property name' label='Property Title' />
+                    </div>
+                    <div className=''>
+                        <Select name='property_type' label='Property Type' options={propertyTypeOptions} />
+                    </div>
+                    <div className=''>
+                        <Select name='category' label='Property Category' options={propertyCategoryOptions} />
+                    </div>
+                    <div className=''>
+                        <Select name='type_of_place' label='Type of place' options={typeofPlaceOptions} />
+                    </div>
+                    <div className=''>
+                        <label htmlFor="" className='text-[15px] text-text1 mb-1 inline-block font-medium'>Availability Dates</label>
+                        <div className='grid grid-cols-2 gap-4'>
+                            <Input type='date' name='availability_dates.start_date' placeholder='Enter Start Date' />
+                            <Input type='date' name='availability_dates.end_date' placeholder='Enter End Date' />
                         </div>
-                        <div className='mt-8'>
-                            <button type='submit' className='btn1 w-full'>Next</button>
+                    </div>
+                    <div className='col-span-2'>
+                        <TextArea name='description' placeholder='Enter property description' label='Property Description' rows={3} inputClass='resize-none' />
+                    </div>
+                    <div className='col-span-2'>
+                        <AddPhotos />
+                    </div>
+                    <div className='col-span-2'>
+                        <Input name='address.address' placeholder='Enter address' label='Address' />
+                    </div>
+                    <div className=''>
+                        <Select name='address.state' label='County / State' options={StateOptions} />
+                    </div>
+                    <div className=''>
+                        <Select name='address.city' label='City' options={CityOptions} />
+                    </div>
+                    <div className=''>
+                        <Input name='address.country' placeholder='Enter country' label='country' />
+                    </div>
+                    <div className=''>
+                        <Input name='address.zip_code' placeholder='Enter Zip Code' label='Zip Code' />
+                    </div>
+                    <div className='col-span-2 mt-3'>
+                        <div className='h-[300px] rounded-xl overflow-hidden'>
+                            <img src={mapBg} className='h-[300px] w-full object-cover' />
                         </div>
-                    </Form>
-                </FormikProvider>
+                    </div>
+                </div>
+                {/* <div className='mt-8'>
+                    <button className='btn1 w-full'>Next</button>
+                </div> */}
             </div>
         </div >
     )

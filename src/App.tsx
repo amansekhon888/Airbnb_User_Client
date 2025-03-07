@@ -1,19 +1,24 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import Layout from "./Layout/Layout"
-import Home from "./pages/Home/Home.tsx"
 import Properties from "./pages/Properties/Properties.tsx"
 import Bookings from "./pages/Bookings/Bookings.tsx"
-import AddProperty from "./Pages/AddProperty/AddProperty.tsx";
-import Dashboard from "./Pages/Dashboard/Dashboard.tsx";
-import Auth from "./Pages/Auth/Auth.tsx";
-import EditProperty from "./Pages/EditProperty/EditProperty.tsx";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute.tsx"
+import AddProperty from "./pages/AddProperty/AddProperty.tsx"
+import Auth from "./pages/Auth/Auth.tsx"
+import Dashboard from "./pages/Dashboard/Dashboard.tsx"
+import EditProperty from "./pages/EditProperty/EditProperty.tsx"
+import { ToastContainer } from 'react-toastify';
 
 const App = () => {
 
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Layout />,
+      element: (
+        // <ProtectedRoute>
+        <Layout />
+        // </ProtectedRoute>
+      ),
       children: [
         {
           path: "/dashboard",
@@ -28,14 +33,16 @@ const App = () => {
           element: <Bookings />
         },
         {
-          path: "/add-property",
-          element: <AddProperty />,
-        },
-        {
           path: "/property/:id",
           element: <EditProperty />,
         },
       ]
+    },
+    {
+      path: "/add-property",
+      element: (
+        <AddProperty />
+      )
     },
     {
       path: "/auth",
@@ -57,6 +64,7 @@ const App = () => {
 
   return (
     <>
+      <ToastContainer />
       <RouterProvider router={router} />
     </>
   )

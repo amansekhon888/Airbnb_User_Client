@@ -66,7 +66,7 @@ const RulesAndPolicies = () => {
                             onChange={handleChange}
                             className="px-3 py-2 text-text1 placeholder:text-text3 border-border1 w-full rounded-md"
                         />
-                        <AccessTimeOutlined className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
+                        {/* <AccessTimeOutlined className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500" /> */}
                     </div>
                 </div>
 
@@ -84,7 +84,7 @@ const RulesAndPolicies = () => {
                             onChange={handleChange}
                             className="px-3 py-2 text-text1 placeholder:text-text3 border-border1 w-full rounded-md"
                         />
-                        <AccessTimeOutlined className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
+                        {/* <AccessTimeOutlined className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500" /> */}
                     </div>
                 </div>
 

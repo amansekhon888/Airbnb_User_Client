@@ -3,7 +3,7 @@ import { useFormikContext } from "formik";
 import { useState } from "react";
 
 const PricingAndAvailability = () => {
-    const { values, setFieldValue, handleChange } = useFormikContext();
+    const { values, setFieldValue, handleChange, errors } = useFormikContext();
     // const [instantBooking, setInstantBooking] = useState(values.instant_booking || false);
 
     return (
@@ -28,6 +28,11 @@ const PricingAndAvailability = () => {
                                 INR(₹)
                             </span>
                         </div>
+                        {errors.price_per_night &&
+                            <span className="text-red-500 text-sm mt-1 block">
+                                {errors.price_per_night}
+                            </span>
+                        }
                     </div>
 
                     {/* Weekend Price */}
@@ -48,6 +53,11 @@ const PricingAndAvailability = () => {
                                 INR(₹)
                             </span>
                         </div>
+                        {errors.weekend_price &&
+                            <span className="text-red-500 text-sm mt-1 block">
+                                {errors.weekend_price}
+                            </span>
+                        }
                     </div>
 
                     {/* Cleaning Fee */}
@@ -68,6 +78,11 @@ const PricingAndAvailability = () => {
                                 INR(₹)
                             </span>
                         </div>
+                        {errors.cleaning_fee &&
+                            <span className="text-red-500 text-sm mt-1 block">
+                                {errors.cleaning_fee}
+                            </span>
+                        }
                     </div>
 
                     {/* Service Fee */}
@@ -88,6 +103,11 @@ const PricingAndAvailability = () => {
                                 INR(₹)
                             </span>
                         </div>
+                        {errors.service_fee &&
+                            <span className="text-red-500 text-sm mt-1 block">
+                                {errors.service_fee}
+                            </span>
+                        }
                     </div>
                 </div>
 
@@ -114,6 +134,11 @@ const PricingAndAvailability = () => {
                                 % off
                             </span>
                         </div>
+                        {errors.weekly_discount &&
+                            <span className="text-red-500 text-sm mt-1 block">
+                                {errors.weekly_discount}
+                            </span>
+                        }
                     </div>
 
                     {/* Monthly Discount */}
@@ -137,6 +162,11 @@ const PricingAndAvailability = () => {
                                 % off
                             </span>
                         </div>
+                        {errors.monthly_discount &&
+                            <span className="text-red-500 text-sm mt-1 block">
+                                {errors.monthly_discount}
+                            </span>
+                        }
                     </div>
                 </div>
 
@@ -188,7 +218,7 @@ const PricingAndAvailability = () => {
                     </div>
                 </div> */}
             </div>
-        </div>
+        </div >
     );
 };
 

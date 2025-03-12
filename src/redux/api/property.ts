@@ -5,10 +5,12 @@ export const propertyApi = baseApi.injectEndpoints({
     getProperties: builder.query({
       query: () => `/property/my`,
       transformResponse: (response) => response.data,
+      providesTags: ["Properties"],
     }),
     getPropertiesById: builder.query({
       query: (id) => `/property/my/${id}`,
-      transformResponse: (response) => response.data
+      transformResponse: (response) => response.data,
+      providesTags: ['Property']
     }),
     addProperty: builder.mutation({
       query: (data) => ({
@@ -17,9 +19,29 @@ export const propertyApi = baseApi.injectEndpoints({
         body: data,
       }),
       transformResponse: (response) => response.data,
-      invalidatesTags: ["Property"],
+      invalidatesTags: ["Properties"],
+    }),
+    editProperty: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/property/${id}`,
+        method: 'PUT',
+        body: data,
+      }),
+      transformResponse: (response) => response.data,
+      invalidatesTags: ['Property'],
+    }),
+    deleteProperty: builder.mutation({
+      query: (id) => ({
+        url: `/property/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ["Properties"],
+    }),
+    getCategories: builder.query({
+      query: () => `/categories`,
+      transformResponse: (response) => response.data,
     })
   }),
 });
 
-export const { useGetPropertiesQuery, useAddPropertyMutation, useGetPropertiesByIdQuery } = propertyApi;
+export const { useGetPropertiesQuery, useAddPropertyMutation, useGetPropertiesByIdQuery, useDeletePropertyMutation, useGetCategoriesQuery, useEditPropertyMutation } = propertyApi;

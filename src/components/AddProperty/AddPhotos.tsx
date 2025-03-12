@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { useFormikContext } from "formik";
 
 const AddPhotos = () => {
-    const { values, setFieldValue } = useFormikContext();
+    const { values, setFieldValue, errors } = useFormikContext();
     const [isDropdownOpen, setDropdownOpen] = useState(null);
     const dropdownRef = useRef(null);
 
@@ -47,24 +47,28 @@ const AddPhotos = () => {
 
     // Set Image as Main
     const setMainImage = (index) => {
-        const updatedGallery = values.gallery.map((img, imgIndex) => ({
-            ...img,
-            isPrimary: imgIndex === index
-        }));
-        setFieldValue("gallery", updatedGallery);
+        setFieldValue("gallery", (prevGallery) => {
+            return prevGallery.map((img, imgIndex) => ({
+                ...img,
+                isPrimary: imgIndex === index
+            }));
+        });
         setDropdownOpen(null);
     };
 
     // Delete Image
     const deleteImage = (index) => {
-        let updatedGallery = values.gallery.filter((_, imgIndex) => imgIndex !== index);
+        setFieldValue("gallery", (prevGallery) => {
+            let updatedGallery = prevGallery.filter((_, imgIndex) => imgIndex !== index);
 
-        // If the deleted image was the main, set the first remaining image as main
-        if (updatedGallery.length > 0 && !updatedGallery.some(img => img.isPrimary)) {
-            updatedGallery[0].isPrimary = true;
-        }
+            // If the deleted image was the main, set the first remaining image as main
+            if (updatedGallery.length > 0 && !updatedGallery.some(img => img.isPrimary)) {
+                updatedGallery[0] = { ...updatedGallery[0], isPrimary: true };
+            }
 
-        setFieldValue("gallery", updatedGallery);
+            return updatedGallery;
+        });
+
         setDropdownOpen(null);
     };
 
@@ -85,16 +89,19 @@ const AddPhotos = () => {
                                         </div>
                                     )}
                                     {/* Dropdown Menu */}
-                                    <div className="absolute top-2 right-2" ref={dropdownRef}>
-                                        <div className="w-6 h-6 flex items-center justify-center bg-white rounded-full cursor-pointer" onClick={() => toggleDropdown(index)}>
+                                    <div className="absolute top-2 right-2" ref={(el) => (dropdownRef.current = el)}>
+                                        <div className="w-6 h-6 flex items-center justify-center bg-white rounded-full cursor-pointer"
+                                            onClick={() => toggleDropdown(index)}>
                                             <MoreHorizOutlined />
                                         </div>
                                         {isDropdownOpen === index && (
                                             <div className="absolute top-8 right-0 w-max bg-white shadow-md rounded-md py-2 border border-gray-300">
-                                                <div className="block w-full text-sm px-3 py-2 text-left hover:bg-gray-100 cursor-pointer" onClick={() => setMainImage(index)}>
+                                                <div className="block w-full text-sm px-3 py-2 text-left hover:bg-gray-100 cursor-pointer"
+                                                    onClick={() => setMainImage(index)}>
                                                     Set as Main
                                                 </div>
-                                                <div className="block w-full text-sm px-3 py-2 text-left hover:bg-gray-100 cursor-pointer" onClick={() => deleteImage(index)}>
+                                                <div className="block w-full text-sm px-3 py-2 text-left hover:bg-gray-100 cursor-pointer"
+                                                    onClick={() => deleteImage(index)}>
                                                     Delete
                                                 </div>
                                             </div>
@@ -133,6 +140,11 @@ const AddPhotos = () => {
                     )}
                 </div>
             </div>
+            {errors.gallery &&
+                <span className="text-red-500 text-sm mt-1 block">
+                    {errors.gallery}
+                </span>
+            }
         </div>
     );
 };

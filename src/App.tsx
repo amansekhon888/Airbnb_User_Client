@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard/Dashboard.tsx"
 import EditProperty from "./pages/EditProperty/EditProperty.tsx"
 import { ToastContainer } from 'react-toastify';
 import PropertyDetails from "./pages/PropertyDetails/PropertyDetails.tsx"
+import 'sweetalert2/src/sweetalert2.scss'
 
 const App = () => {
 

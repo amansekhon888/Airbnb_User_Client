@@ -4,11 +4,11 @@ import NewPropertyDetails from "../../Components/AddProperty/NewPropertyDetails.
 import PricingAndAvailability from "../../Components/AddProperty/PricingAndAvailability.tsx";
 import RulesAndPolicies from "../../Components/AddProperty/RulesAndPolicies.tsx";
 import AdditionalInformation from "../../Components/AddProperty/AdditionalInformation.tsx";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { KeyboardArrowDownOutlined, KeyboardArrowLeftOutlined, KeyboardArrowUpOutlined } from "@mui/icons-material";
 import { Form, Formik } from "formik";
 import { useEffect, useState } from "react";
-import { initialValues } from "../../Formik/property.ts";
+import { initialValues, propertySchema } from "../../Formik/property.ts";
 import { useAddPropertyMutation, useGetPropertiesByIdQuery } from "../../redux/api/property.ts";
 import Header from "../../components/Header/Header.tsx";
 import { toast } from "react-toastify";
@@ -22,11 +22,12 @@ const steps = [
 ];
 
 const AddProperty = () => {
+    const navigate = useNavigate()
     const [searchParams] = useSearchParams();
     const id = searchParams.get("draft");
     const { data: propertyData, isLoading } = useGetPropertiesByIdQuery(id, { skip: !id });
 
-    const [currentStep, setCurrentStep] = useState(0);
+    const [currentStep, setCurrentStep] = useState(1);
     const [expandedStep, setExpandedStep] = useState(0);
     const [propertyId, setPropertyId] = useState(id || "");
     const [draftStepsCompleted, setDraftStepsCompleted] = useState(0);
@@ -36,6 +37,7 @@ const AddProperty = () => {
     console.log("propertyId:", propertyId);
     console.log("currentStep:", currentStep);
     console.log("expandedStep:", expandedStep);
+    console.log("draftStepsCompleted:", draftStepsCompleted);
 
     // ✅ Update steps only when `propertyData` is available
     useEffect(() => {
@@ -71,15 +73,33 @@ const AddProperty = () => {
             console.log("Response:", response);
 
             if (response._id) {
-                setPropertyId(response._id); // Store property ID after first submission
+                setPropertyId(response._id);
             }
-            toast.success(`${steps[currentStep - 1].title} Successfully Updated`)
+            if (currentStep > draftStepsCompleted) {
 
-            // ✅ Ensure `draftStepsCompleted` does not decrease
+                toast.success(
+                    <span>
+                        <strong>{steps[currentStep - 1].title}</strong> Saved
+                    </span>,
+                    {
+                        position: "bottom-center",
+                        className: "text-nowrap w-max pr-7",
+                    }
+                );
+            } else {
+                toast.success(
+                    <span>
+                        <strong>{steps[currentStep - 1].title}</strong> Successfully Updated
+                    </span>,
+                    {
+                        position: "bottom-center",
+                        className: "text-nowrap w-max pr-7",
+                    }
+                );
+            }
+
             setDraftStepsCompleted(response.draft_steps_completed);
 
-            // ✅ If updating a previous step, keep `expandedStep` unchanged
-            // ✅ If submitting a new step, update `expandedStep`
             setExpandedStep(response.draft_steps_completed);
         } catch (error) {
             console.error("Error saving property:", error);
@@ -94,10 +114,12 @@ const AddProperty = () => {
             const response = await addPropertyFun(requestData).unwrap();
             console.log("Response:", response);
             toast.success("Property saved successfully")
+            navigate('/my-properties')
         } catch (error) {
             console.error("Error saving property:", error);
         }
     }
+
     return (
         <>
             <Header />
@@ -116,7 +138,7 @@ const AddProperty = () => {
                         {isLoading ? (
                             <p>Loading property details...</p>
                         ) : (
-                            <Formik initialValues={mergedInitialValues} onSubmit={handleFormSubmit} enableReinitialize>
+                            <Formik initialValues={mergedInitialValues} validationSchema={propertySchema[currentStep - 1]} onSubmit={handleFormSubmit} enableReinitialize>
                                 {() => (
                                     <Form>
                                         <div className="flex flex-col gap-12">
@@ -149,13 +171,13 @@ const AddProperty = () => {
                                                             {isExpanded && (
                                                                 <>
                                                                     <div>
-                                                                        <step.component setCurrentStep={setCurrentStep} />
+                                                                        <step.component />
                                                                     </div>
                                                                     <div className="flex w-full gap-5 justify-between mt-6">
                                                                         <button type="submit" className="btn1 w-full" onClick={() => {
                                                                             setCurrentStep(index + 1); console.log("index:", index + 1);
                                                                         }} disabled={isSaving}>
-                                                                            {isSaving ? "Saving..." : draftStepsCompleted >= index ? "Update" : "Save & Next"}
+                                                                            {isSaving ? "Saving..." : draftStepsCompleted >= index + 1 ? "Update" : "Save & Next"}
                                                                         </button>
                                                                     </div>
                                                                 </>
@@ -169,10 +191,20 @@ const AddProperty = () => {
                                 )}
                             </Formik>
                         )}
-                        <div className="mt-10 flex items-center justify-end gap-4">
-                            <button className="btn2">Preview</button>
-                            <button className="btn1" onClick={handelPublish}>Publish</button>
-                        </div>
+                        {draftStepsCompleted === 5 && (
+                            <>
+                                <hr className="my-10 border-primary" />
+                                <div className="flex flex-col sm:flex-row smitems-center justify-between gap-4">
+                                    <p className="text-text3">
+                                        All steps are completed!<br /> Please <strong>preview your property</strong> before publishing.
+                                    </p>
+                                    <div className="flex items-center gap-4">
+                                        <button className="btn2">Preview</button>
+                                        <button className="btn1" onClick={handelPublish}>Publish</button>
+                                    </div>
+                                </div>
+                            </>
+                        )}
                     </div>
                 </div>
             </div>

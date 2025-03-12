@@ -3,7 +3,7 @@ import { useFormikContext } from "formik";
 import React from "react";
 
 const NewPropertyDetails = () => {
-    const { values, setFieldValue } = useFormikContext();
+    const { values, setFieldValue, errors } = useFormikContext();
 
     const Amenities = [
         {
@@ -210,6 +210,13 @@ const NewPropertyDetails = () => {
                     </div>
                 </div>
             ))}
+            {errors.amenities &&
+                <div className="mt-6">
+                    <span className="text-red-500 text-sm block">
+                        {errors.amenities}
+                    </span>
+                </div>
+            }
         </div>
     );
 };

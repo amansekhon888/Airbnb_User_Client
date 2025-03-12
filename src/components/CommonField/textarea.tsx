@@ -7,17 +7,18 @@ interface IInput {
     label?: string,
     placeholder?: string,
     divClass?: string,
-    inputClass?: string, 
+    inputClass?: string,
     labelClass?: string,
     disabled?: boolean,
     isRequired?: boolean
     rows?: number
-    error?: string
 }
 
-const TextArea: React.FC<IInput> = ({ name, disabled, label,placeholder, inputClass, labelClass, isRequired = false, rows = 2, error }) => {
-    const { handleBlur, handleChange, values } = useFormikContext()
+const TextArea: React.FC<IInput> = ({ name, disabled, label, placeholder, inputClass, labelClass, isRequired = false, rows = 2 }) => {
+    const { handleBlur, handleChange, values, errors, touched } = useFormikContext()
     const fieldValue = getIn(values, name, "");
+    const error = getIn(errors, name);
+    const isTouched = getIn(touched, name);
 
     return (
         <div>
@@ -28,12 +29,14 @@ const TextArea: React.FC<IInput> = ({ name, disabled, label,placeholder, inputCl
                 onBlur={handleBlur}
                 name={name}
                 rows={rows}
-                className={classNames("py-2 px-3 text-text1 placeholder:text-text3 border-border1 w-full rounded-md", inputClass)}
+                className={classNames("py-2 px-3 text-text1 placeholder:text-text3 border-border1 w-full rounded-md",
+                    { "border-red-500": error && isTouched },
+                    inputClass)}
                 placeholder={placeholder}
                 value={fieldValue}
             ></textarea>
-            {error && (
-                <span className="text-red-500 text-sm mt-1 block">{error}</span> // Display error message
+            {error && isTouched && (
+                <span className="text-red-500 text-sm mt-1 block">{error}</span> // Show error message dynamically
             )}
         </div>
     )

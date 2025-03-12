@@ -5,15 +5,13 @@ import classNames from "classnames";
 interface ISelect {
   name: string;
   label?: string;
-  value?: string | number;
   placeholder?: string;
-  inputClass?: string; //  i am taking label class, input class in differnet because of tailwind , as passing tailwind class is easy as compared to giving parent class and writing manual css
+  inputClass?: string; 
   labelClass?: string;
-  options: option[];
-  error?: string
+  options: Option[];
 }
 
-type option = {
+type Option = {
   label: string;
   value: string;
 };
@@ -25,10 +23,12 @@ const Select: React.FC<ISelect> = ({
   placeholder,
   inputClass,
   labelClass,
-  error
 }) => {
-  const { handleBlur, handleChange, values } = useFormikContext();
+  const { handleBlur, handleChange, values, errors, touched } = useFormikContext<{ [key: string]: any }>();
+  
   const fieldValue = getIn(values, name, "");
+  const error = getIn(errors, name);
+  const isTouched = getIn(touched, name);
 
   return (
     <div>
@@ -47,6 +47,7 @@ const Select: React.FC<ISelect> = ({
         id={name}
         className={classNames(
           "py-2 px-3 text-text1 placeholder:text-text3 border-border1 w-full rounded-md",
+          { "border-red-500": error && isTouched }, // Dynamically apply error border
           inputClass
         )}
         value={fieldValue}
@@ -60,8 +61,8 @@ const Select: React.FC<ISelect> = ({
           </option>
         ))}
       </select>
-      {error && (
-        <span className="text-red-500 text-sm mt-1 block">{error}</span> // Display error message
+      {error && isTouched && (
+        <span className="text-red-500 text-sm mt-1 block">{error}</span> // Show error message dynamically
       )}
     </div>
   );

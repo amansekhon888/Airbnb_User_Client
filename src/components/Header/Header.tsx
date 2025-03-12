@@ -15,7 +15,6 @@ interface IsProps {
 const pathMap: { [key: string]: string } = {
     "/": "Dashboard",
     "/my-properties": "My Properties",
-    "/bookings": "Bookings",
     "/add-property": "Add Property",
 };
 
@@ -34,11 +33,15 @@ const Header = ({
         setSideBarShow(!isSidebarShow);
     };
     let tempTitle = pathMap[location.pathname];
+
     if (!tempTitle) {
-        const matchedBasePath = Object.keys(pathMap).find((key) =>
-            location.pathname.startsWith(key)
-        );
-        tempTitle = pathMap[matchedBasePath || ""];
+        if (location.pathname.startsWith("/property/edit/")) {
+            tempTitle = "Edit Property"; // Handle /property/edit/:id
+        } else if (location.pathname.startsWith("/bookings/")) {
+            tempTitle = "Booking Details"; // Handle /bookings/:id
+        } else {
+            tempTitle = "Dashboard";
+        }
     }
 
     return (

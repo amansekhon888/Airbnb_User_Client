@@ -172,7 +172,7 @@ const PropertyDetails = () => {
                             {/* <PricingDetails data={data} /> */}
                         </div>
                         <div className="lg:flex gap-10 relative">
-                            <div className="w-full lg:w-[60%] xl:w-[70%]">
+                            <div className="w-full">
                                 <div className='mt-6'>
                                     <div className=''>
                                         <h4 className='text-2xl font-semibold'>About this place</h4>
@@ -306,11 +306,11 @@ const PropertyDetails = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="hidden lg:block lg:w-[40%] xl:w-[30%]">
+                            {/* <div className="hidden lg:block lg:w-[40%] xl:w-[30%]">
                                 <div className=' sticky top-[120px]'>
-                                    {/* <PricingDetails data={data} /> */}
+                                    <PricingDetails data={data} />
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>

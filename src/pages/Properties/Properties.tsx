@@ -1,36 +1,79 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import cate1 from "../../assets/images/cate1.png"
 import { ToggleSwitch } from 'flowbite-react'
-import { EditOutlined, Visibility } from '@mui/icons-material'
-import { useGetPropertiesQuery } from '../../redux/api/property'
+import { DeleteOutline, EditOutlined, Visibility } from '@mui/icons-material'
+import { useDeletePropertyMutation, useGetPropertiesQuery } from '../../redux/api/property'
+import { toast } from 'react-toastify'
+import Swal from 'sweetalert2'
 
 const Properties = () => {
+    const navigate = useNavigate()
     const [selectedTab, setSelectedTab] = useState("all")
     const { data } = useGetPropertiesQuery({})
-
-    const status = {
-        "active": <span className="text-sm text-green-500 bg-green-600 font-medium bg-opacity-10 rounded px-2.5 py-1">Active</span>,
-        "inactive": <span className="text-sm text-red-500 bg-red-600 font-medium bg-opacity-10 rounded px-2.5 py-1">In-Active</span>,
-        "draft": <span className="text-sm text-yellow-500 bg-yellow-600 font-medium bg-opacity-10 rounded px-2.5 py-1">Draft</span>,
-    }
-    console.log(data);
-
-    const filterProperties = selectedTab === "all" ? data : data?.filter((property) => property.status === selectedTab)
-    console.log(filterProperties);
-
+    const [deleteProperty, { isLoading }] = useDeletePropertyMutation()
     const tabs = [
         "all",
         "active",
         "inactive",
         "draft",
     ]
+
+    const status = {
+        "active": <span className="text-sm text-green-500 bg-green-600 font-medium bg-opacity-10 rounded px-2.5 py-1">Active</span>,
+        "inactive": <span className="text-sm text-red-500 bg-red-600 font-medium bg-opacity-10 rounded px-2.5 py-1">In-Active</span>,
+        "draft": <span className="text-sm text-yellow-500 bg-yellow-600 font-medium bg-opacity-10 rounded px-2.5 py-1">Draft</span>,
+    }
+    const filterProperties = selectedTab === "all" ? data : data?.filter((property) => property.status === selectedTab)
+    const handleAddProperty = () => {
+        const draftProperties = data?.filter((property) => property.status === "draft")
+        console.log(draftProperties);
+
+        if (draftProperties.length >= 5) {
+            Swal.fire({
+                title: "Limit Reached!",
+                text: "You already have 3 properties in draft. Please publish or delete a draft before adding a new one.",
+                icon: "warning",
+                showConfirmButton: false,
+                showCloseButton: true,
+            });
+        } else {
+            navigate("/add-property")
+        }
+    }
+    const handleDeleteProperty = async (id) => {
+        const result = await Swal.fire({
+            title: 'Are you sure?',
+            text: 'Do you want to delete this property?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!',
+        });
+
+        if (result.isConfirmed) {
+            try {
+                await deleteProperty(id);
+                Swal.fire({
+                    title: "Deleted!",
+                    text: "Property deleted successfully",
+                    icon: "success",
+                    showConfirmButton: false,
+                    showCloseButton: true,
+                });
+            } catch (error) {
+                console.error(error);
+                toast.error('Failed to delete property');
+            }
+        }
+    };
     return (
         <div>
             <div className="flex items-center justify-between border-b pb-3 border-primary border-opacity-40">
                 <h4 className='text-xl font-semibold text-primary'>Property List ({filterProperties?.length})</h4>
                 <div>
-                    <Link to="/add-property" className='btn1 flex items-center justify-center'>Add Property</Link>
+                    <button onClick={handleAddProperty} className='btn1 flex items-center justify-center'>Add Property</button>
                 </div>
             </div>
             <div className='mt-5'>
@@ -100,7 +143,7 @@ const Properties = () => {
                                     <th
                                         scope="col"
                                         className="py-2 px-3"
-                                        style={{ minWidth: "100px" }}
+                                        style={{ minWidth: "120px" }}
                                     >
                                         <div className="flex items-center gap-2.5 font-medium text-nowrap">
                                             Actions
@@ -158,20 +201,30 @@ const Properties = () => {
                                         </td>
                                         <td className=" py-1.5 px-3 rounded-r-xl">
                                             {property.status === "active" &&
-                                                <Link
-                                                    to={`/property/${property._id}`}
-                                                    className="mx-auto"
-                                                >
-                                                    <Visibility className="text-primary" />
-                                                </Link>
+                                                <div className='flex justify-start gap-2'>
+                                                    <Link
+                                                        to={`/property/${property._id}`}
+                                                    >
+                                                        <Visibility className="text-primary !text-xl" />
+                                                    </Link>
+                                                    <Link
+                                                        to={`/property/edit/${property._id}`}
+                                                    >
+                                                        <EditOutlined className="text-primary !text-xl" />
+                                                    </Link>
+                                                </div>
                                             }
                                             {property.status === "draft" &&
-                                                <Link
-                                                    to={`/add-property?draft=${property._id}`}
-                                                    className="mx-auto"
-                                                >
-                                                    <EditOutlined className="text-primary" />
-                                                </Link>
+                                                <div className='flex justify-start gap-2'>
+                                                    <Link
+                                                        to={`/add-property?draft=${property._id}`}
+                                                    >
+                                                        <EditOutlined className="text-primary !text-xl" />
+                                                    </Link>
+                                                    <button onClick={() => handleDeleteProperty(property._id)}>
+                                                        <DeleteOutline className="text-red-600 !text-xl" />
+                                                    </button>
+                                                </div>
                                             }
                                         </td>
                                     </tr>

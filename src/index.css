@@ -42,6 +42,10 @@ body {
   transition: all 0.3s;
   border-radius: 8px;
 }
+.btn1.disabled {
+  background: #00858e !important;
+  opacity: 0.5;
+}
 .btn2 {
   border: 2px solid #00858e;
   height: 42px;

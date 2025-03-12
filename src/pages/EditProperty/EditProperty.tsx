@@ -1,17 +1,27 @@
 import { KeyboardArrowLeftOutlined, KeyboardArrowRightOutlined } from '@mui/icons-material';
-import React, { useEffect, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
-import PropertyInfo from "./component/PropertyInfo.tsx";
-import PropertyDetails from "./component/PropertyDetails.tsx";
-import PricingAndAvailability from "./component/PricingAndAvailability.tsx";
-import RulesAndPolicies from "./component/RulesAndPolicies.tsx";
-import AdditionalInformation from "./component/AdditionalInformation.tsx";
+import { useEffect, useState } from 'react';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
+// import PropertyInfo from "./component/PropertyInfo.tsx";
+import { useEditPropertyMutation, useGetPropertiesByIdQuery } from '../../redux/api/property.ts';
+import { Form, Formik } from 'formik';
+import { initialValues, propertySchema } from '../../Formik/property.ts';
+import NewPropertyDetails from '../../Components/AddProperty/NewPropertyDetails.tsx';
+import PropertyInfo from '../../Components/AddProperty/PropertyInfo.tsx';
+import PricingAndAvailability from '../../Components/AddProperty/PricingAndAvailability.tsx';
+import RulesAndPolicies from '../../Components/AddProperty/RulesAndPolicies.tsx';
+import AdditionalInformation from '../../Components/AddProperty/AdditionalInformation.tsx';
+import { toast } from 'react-toastify';
 
 const EditProperty = () => {
+    const { id } = useParams()
+    const { data: propertyData, isLoading } = useGetPropertiesByIdQuery(id)
+    const [editProperty, { isLoading: EditLoading }] = useEditPropertyMutation()
     const [searchParams, setSearchParams] = useSearchParams();
     const tabParam = searchParams.get("tab");
     const [isMobileView, setIsMobileView] = useState(false);
+    console.log(propertyData);
 
+    const mergedInitialValues = propertyData ? { ...initialValues, ...propertyData } : initialValues;
     useEffect(() => {
         const handleResize = () => {
             setIsMobileView(window.innerWidth < 992);
@@ -23,12 +33,11 @@ const EditProperty = () => {
 
     const EditPropertyList = [
         { title: "Property Information", Component: <PropertyInfo /> },
-        { title: "Property Details", Component: <PropertyDetails /> },
+        { title: "Property Details", Component: <NewPropertyDetails /> },
         { title: "Pricing & Availability", Component: <PricingAndAvailability /> },
         { title: "House Rules & Policies", Component: <RulesAndPolicies /> },
         { title: "Additional Information", Component: <AdditionalInformation /> },
     ];
-
 
     const initialIndex = Math.max(EditPropertyList.findIndex(setting => setting.title.toLowerCase() === tabParam?.toLowerCase()), 0);
     const [activeIndex, setActiveIndex] = useState(initialIndex);
@@ -43,6 +52,27 @@ const EditProperty = () => {
         setSearchParams({});
     };
 
+    const handleEdit = async (values, { setSubmitting }) => {
+        console.log(values);
+        const data = {
+            step: initialIndex + 1,
+            ...values
+        }
+        try {
+            const response = await editProperty({
+                id,
+                data,
+            }).unwrap();
+
+            console.log("Property updated successfully:", response);
+            toast.success("Property updated successfully!");
+        } catch (error) {
+            console.error("Error updating property:", error);
+            toast.error("Failed to update property.");
+        } finally {
+            setSubmitting(false);
+        }
+    };
     return (
         <div>
             <div className="text-text1 ">
@@ -81,15 +111,49 @@ const EditProperty = () => {
                     }
                     <div className={`w-full lg:w-[60%] ${isMobileView && !showComponent ? "hidden" : "block"}`}>
                         <div className='border border-border1 rounded-xl p-4'>
-                            {isMobileView && showComponent ?
-                                <div className="text-lg font-medium text-text1 flex items-center cursor-pointer" onClick={handleBack}>
-                                    <KeyboardArrowLeftOutlined className="!text-2xl" />
-                                    <h4 className='text-text1 text-xl font-medium'>{EditPropertyList[activeIndex].title}</h4>
-                                </div>
-                                :
-                                <h4 className='text-text1 text-xl font-medium'>{EditPropertyList[activeIndex].title}</h4>
+                            {isLoading || EditLoading ? <div>Loading...</div> :
+                                <>
+                                    {isMobileView && showComponent ?
+                                        <div className="text-lg font-medium text-text1 flex items-center cursor-pointer" onClick={handleBack}>
+                                            <KeyboardArrowLeftOutlined className="!text-2xl" />
+                                            <h4 className='text-text1 text-xl font-medium'>{EditPropertyList[activeIndex].title}</h4>
+                                        </div>
+                                        :
+                                        <h4 className='text-text1 text-xl font-medium'>{EditPropertyList[activeIndex].title}</h4>
+                                    }
+                                    <Formik
+                                        initialValues={mergedInitialValues}
+                                        validationSchema={propertySchema[activeIndex]}
+                                        onSubmit={handleEdit}
+                                        enableReinitialize
+                                    >
+                                        {({ dirty, isValid, resetForm, isSubmitting }) => (
+                                            <Form>
+                                                {EditPropertyList[activeIndex].Component}
+                                                <div className="mt-8 flex justify-end gap-3">
+                                                    <button
+                                                        type="button"
+                                                        className={`btn1 border border-text1 !bg-transparent !text-text1 ${dirty ? "hover:!text-red-600 hover:border-red-600" : "opacity-50 cursor-not-allowed"}`}
+                                                        disabled={!dirty}
+                                                        onClick={() => {
+                                                            if (propertyData) resetForm({ values: { ...initialValues, ...propertyData } });
+                                                        }}
+                                                    >
+                                                        Discard
+                                                    </button>
+                                                    <button
+                                                        type="submit"
+                                                        className={`btn1 ${!dirty || !isValid || isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}
+                                                        disabled={!dirty || !isValid || isSubmitting}
+                                                    >
+                                                        {isSubmitting ? "Saving..." : "Save"}
+                                                    </button>
+                                                </div>
+                                            </Form>
+                                        )}
+                                    </Formik>
+                                </>
                             }
-                            {EditPropertyList[activeIndex].Component}
                         </div>
                     </div>
                 </div>

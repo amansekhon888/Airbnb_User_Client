@@ -1,12 +1,19 @@
-import { CloseOutlined, VisibilityOutlined } from '@mui/icons-material';
+import { CloseOutlined, KeyboardArrowLeftOutlined, VisibilityOutlined } from '@mui/icons-material';
 import { Modal } from 'flowbite-react';
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom';
 
 const Bookings = () => {
     const [openModal, setOpenModal] = useState(false)
     return (
         <div>
-            <div className="relative overflow-x-auto">
+            <div className="text-text1 ">
+                <Link to="/my-properties" className='flex items-start'>
+                    <span><KeyboardArrowLeftOutlined className='!text-3xl' /></span>
+                    <h4 className='text-2xl font-semibold  text-primary'>Lorem ipsum dolor sit amet consectetur</h4>
+                </Link>
+            </div>
+            <div className="mt-5 relative overflow-x-auto">
                 <table
                     className="w-full border-separate min-w-full"
                     style={{ borderSpacing: "0 10px" }}

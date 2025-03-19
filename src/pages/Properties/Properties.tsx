@@ -68,6 +68,7 @@ const Properties = () => {
             }
         }
     };
+
     return (
         <div>
             <div className="flex items-center justify-between border-b pb-3 border-primary border-opacity-40">
@@ -161,7 +162,7 @@ const Properties = () => {
                                             <div>
                                                 <div className="flex items-center gap-3">
                                                     <img
-                                                        src={cate1}
+                                                        src={property.gallery.find((image) => image.isPrimary).url}
                                                         className="border-2 border-[#E8E1F6] rounded-lg w-16 h-12 object-cover"
                                                         alt=""
                                                     />

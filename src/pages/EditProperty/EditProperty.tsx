@@ -78,7 +78,7 @@ const EditProperty = () => {
             <div className="text-text1 ">
                 <Link to="/my-properties" className='flex items-start'>
                     <span><KeyboardArrowLeftOutlined className='!text-3xl' /></span>
-                    <h4 className='text-2xl font-semibold  text-primary'>Lorem ipsum dolor sit amet consectetur</h4>
+                    <h4 className='text-2xl font-semibold  text-primary'>{mergedInitialValues.title}</h4>
                 </Link>
             </div>
             <div className='mt-5 relative'>

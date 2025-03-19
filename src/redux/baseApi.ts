@@ -42,11 +42,28 @@ export const baseApi = createApi({
     baseUrl: 'http://localhost:3008/api',
     // credentials: "include",
     prepareHeaders: (headers) => {
-      headers.set('Authorization', `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YmEyODM1OGE3M2Q4ZmUxNTFjNjA0NyIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0MTA2NzU0MiwiZXhwIjoxNzQxOTMxNTQyfQ.2ETq_iLgVk5fFxukIFS4S_6n7WjJ0XgkuuGUhnc2RMk`)
+      headers.set('Authorization', `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YmEyODM1OGE3M2Q4ZmUxNTFjNjA0NyIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0MjMwMDcwOSwiZXhwIjoxNzQzMTY0NzA5fQ.ieWlOUwmZ5Sso8ngYAkhYbWIoVQrGpxj1k044mmglnE`)
       return headers
     },
   }),
   tagTypes: ['User', 'verify', 'Properties', "Property"],
-  endpoints: () => ({
-  }),
-})
+  endpoints: (builder) => ({
+    uploadSingleImage: builder.mutation({
+      query: (formData) => ({
+        url: `/upload-single`,
+        method: 'POST',
+        body: formData,
+      }),
+    }),
+    uploadMultipleImages: builder.mutation({
+      query: (formData) => ({
+        url: `/upload-multiple`,
+        method: 'POST',
+        body: formData,
+      }),
+      transformResponse: (response) => response.data,
+    }),
+  })
+});
+
+export const { useUploadSingleImageMutation, useUploadMultipleImagesMutation } = baseApi;

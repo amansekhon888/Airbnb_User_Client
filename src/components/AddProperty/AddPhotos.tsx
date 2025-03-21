@@ -28,6 +28,8 @@ const AddPhotos = () => {
         if (selectedFiles.length === 0) return;
 
         const formData = new FormData();
+        console.log(selectedFiles);
+        
         selectedFiles.forEach((file) => formData.append("images", file));
 
         try {
